@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#1B4F8A">
+<title>Criança Solidária – Exército da Salvação</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;600;700&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --vermelho:     #1B4F8A;
+  --vermelho-esc: #143D6E;
+  --azul:         #1B4F8A;
+  --azul-claro:   #E8F0FA;
+  --dourado:      #FFD100;
+  --fundo:        #F5F8FF;
+  --branco:       #FFFFFF;
+  --texto:        #0D1F3C;
+  --texto-suave:  #4A6080;
+  --borda:        #C8D8EE;
+  --sombra:       0 4px 20px rgba(27,79,138,0.12);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--fundo);
+  color: var(--texto);
+  overflow-x: hidden;
+  max-width: 480px;
+  margin: 0 auto;
+  font-size: 15px;
+  line-height: 1.5;
+}
+img { max-width: 100%; display: block; }
+a { text-decoration: none; }
+button { font-family: 'DM Sans', sans-serif; cursor: pointer; }
+@keyframes fadeUp     { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
+@keyframes ticker     { 0% { transform:translateX(0); } 100% { transform:translateX(-50%); } }
+@keyframes shimmer    { 0%,100% { opacity:0; } 50% { opacity:1; } }
+@keyframes heartbeat  { 0%,100% { transform:scale(1); } 14% { transform:scale(1.14); } 28% { transform:scale(1); } 42% { transform:scale(1.08); } }
+@keyframes pulseverde { 0% { box-shadow:0 0 0 0 rgba(39,174,96,0.5); } 70% { box-shadow:0 0 0 6px rgba(39,174,96,0); } 100% { box-shadow:0 0 0 0 rgba(39,174,96,0); } }
+@keyframes pulseverm  { 0% { box-shadow:0 0 0 0 rgba(27,79,138,0.5); } 70% { box-shadow:0 0 0 7px rgba(27,79,138,0); } 100% { box-shadow:0 0 0 0 rgba(27,79,138,0); } }
+.nav {
+  position: fixed; top: 0; left: 50%; transform: translateX(-50%);
+  width: 100%; max-width: 480px; z-index: 300;
+  background: rgba(255,255,255,0.97);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  border-bottom: 2.5px solid var(--vermelho);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 9px 14px; gap: 8px;
+}
+.nav-logo-wrap { display:flex; align-items:center; gap:8px; min-width:0; flex:1; }
+.nav-escudo { width:32px; height:32px; flex-shrink:0; background:var(--vermelho); clip-path:polygon(50% 0%,100% 15%,100% 72%,50% 100%,0% 72%,0% 15%); display:flex; align-items:center; justify-content:center; }
+.nav-escudo-inner { width:18px; height:18px; background:var(--dourado); clip-path:polygon(50% 0%,100% 15%,100% 72%,50% 100%,0% 72%,0% 15%); display:flex; align-items:center; justify-content:center; }
+.nav-escudo-s { font-family:'Playfair Display',serif; font-size:0.55rem; font-weight:900; color:var(--vermelho); }
+.nav-nome { min-width:0; }
+.nav-nome strong { display:block; font-size:0.76rem; font-weight:800; color:var(--texto); line-height:1.15; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.nav-nome span   { display:block; font-size:0.52rem; font-weight:700; color:var(--vermelho); letter-spacing:0.8px; text-transform:uppercase; white-space:nowrap; }
+.nav-direita { display:flex; align-items:center; gap:7px; flex-shrink:0; }
+.nav-ao-vivo { display:flex; align-items:center; gap:4px; }
+.nav-dot { width:7px; height:7px; border-radius:50%; background:#27AE60; animation:pulseverde 2s infinite; flex-shrink:0; }
+.nav-live-txt { font-size:0.62rem; font-weight:600; color:var(--azul); white-space:nowrap; }
+.nav-btn { background:var(--vermelho); color:#fff; border:none; border-radius:100px; padding:8px 15px; font-size:0.78rem; font-weight:700; white-space:nowrap; flex-shrink:0; transition:background 0.2s; }
+.nav-btn:hover { background:var(--vermelho-esc); }
+.ticker {
+  background: var(--azul);
+  overflow: hidden;
+  padding: 8px 0;
+  border-bottom: 3px solid var(--dourado);
+  margin-top: 52px;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 5%, black 95%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0%, black 5%, black 95%, transparent 100%);
+}
+.ticker-faixa {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  animation: ticker 32s linear infinite;
+  white-space: nowrap;
+}
+.ticker-item { padding:0 22px; font-size:0.72rem; color:rgba(255,255,255,0.82); }
+.ticker-item strong { color:var(--dourado); }
+.ticker-sep { color:rgba(255,255,255,0.22); padding:0 2px; }
+.hero { position:relative; min-height:86vh; display:flex; align-items:flex-end; overflow:hidden; }
+.hero-foto {
+  position:absolute; inset:0;
+  background-image: url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhkbaPq5WwXfS65ZSD2duEyF3gHlvFrD4O4hC76n1ris4y7PLv46MqI2XBC_HdZBLPvjWnNqWGuMLsaRv81Bdiq8xlt9QlZSVH1WAjIwU1FNZ2_zSpTtE3Btpvli9JnI6ejc9bPtH9Y42k/s1600/news10.jpg');
+  background-size:cover; background-position:center 30%;
+  filter:brightness(0.35) saturate(0.65);
+}
+.hero-overlay { position:absolute; inset:0; background:linear-gradient(to bottom,rgba(13,31,60,0.10) 0%,rgba(27,79,138,0.10) 35%,rgba(13,31,60,0.92) 100%); }
+.hero-listra { position:absolute; top:0; left:0; right:0; height:4px; z-index:2; background:repeating-linear-gradient(90deg,var(--vermelho) 0,var(--vermelho) 48px,var(--dourado) 48px,var(--dourado) 64px,var(--azul) 64px,var(--azul) 112px); }
+.hero-conteudo { position:relative; z-index:2; padding:0 18px 40px; width:100%; }
+.hero-badge { display:inline-flex; align-items:center; gap:6px; background:rgba(27,79,138,0.20); border:1px solid rgba(27,79,138,0.45); color:#B8D0EE; font-size:0.63rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; padding:4px 12px; border-radius:100px; margin-bottom:12px; animation:fadeUp 0.5s ease both; }
+.hero h1 { font-family:'Playfair Display',serif; font-size:1.85rem; font-weight:900; line-height:1.13; color:#fff; margin-bottom:12px; animation:fadeUp 0.5s 0.1s ease both; }
+.hero h1 em { color:var(--dourado); font-style:italic; }
+.hero-sub { font-size:0.90rem; line-height:1.70; color:rgba(255,255,255,0.85); margin-bottom:18px; animation:fadeUp 0.5s 0.18s ease both; }
+.hero-sub strong { color:var(--dourado); }
+.hero-pills { display:flex; gap:7px; flex-wrap:wrap; margin-bottom:20px; animation:fadeUp 0.5s 0.24s ease both; }
+.hero-pill { background:rgba(255,255,255,0.10); backdrop-filter:blur(4px); border:1px solid rgba(255,255,255,0.16); border-radius:100px; padding:4px 12px; font-size:0.70rem; color:#fff; font-weight:500; }
+.hero-pill strong { color:var(--dourado); }
+.btn-hero { display:flex; align-items:center; justify-content:center; gap:8px; background:var(--vermelho); color:#fff; border:none; border-radius:13px; padding:15px 20px; font-size:0.98rem; font-weight:700; width:100%; box-shadow:0 6px 22px rgba(27,79,138,0.45); transition:background 0.2s, transform 0.15s; animation:fadeUp 0.5s 0.30s ease both; }
+.btn-hero:hover { background:var(--vermelho-esc); transform:translateY(-1px); }
+.urgencia-faixa { background:var(--vermelho); padding:11px 18px; text-align:center; }
+.urgencia-faixa p { color:#fff; font-size:0.83rem; font-weight:600; line-height:1.5; }
+.urgencia-faixa strong { font-size:0.92rem; }
+.progresso { background:var(--azul-claro); padding:22px 18px; border-bottom:1px solid rgba(27,79,138,0.10); }
+.prog-label { font-size:0.63rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--azul); margin-bottom:5px; }
+.prog-titulo { font-family:'Playfair Display',serif; font-size:1.02rem; font-weight:700; color:var(--texto); margin-bottom:12px; }
+.prog-barra-wrap { background:rgba(27,79,138,0.12); border-radius:100px; height:10px; overflow:hidden; margin-bottom:7px; }
+.prog-barra-fill { height:100%; border-radius:100px; background:linear-gradient(90deg,var(--vermelho),var(--dourado)); width:0%; transition:width 1.8s cubic-bezier(0.22,1,0.36,1); position:relative; }
+.prog-barra-fill::after { content:''; position:absolute; top:0; right:0; bottom:0; width:26px; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.36)); animation:shimmer 2s infinite; }
+.prog-numeros { display:flex; justify-content:space-between; font-size:0.75rem; color:var(--texto-suave); }
+.prog-numeros strong { color:var(--texto); font-size:0.82rem; }
+.prog-pct { font-family:'Playfair Display',serif; font-size:0.96rem; font-weight:700; color:var(--vermelho); }
+.secao-doacao { background:var(--branco); padding:28px 18px 36px; border-bottom:4px solid var(--azul-claro); }
+.secao-doacao .secao-tag { font-size:0.63rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--azul); margin-bottom:5px; }
+.secao-doacao .secao-titulo { font-family:'Playfair Display',serif; font-size:1.30rem; font-weight:900; color:var(--texto); margin-bottom:6px; line-height:1.2; }
+.secao-doacao .secao-sub { font-size:0.84rem; color:var(--texto-suave); line-height:1.65; margin-bottom:18px; }
+.urgencia-pill { display:flex; align-items:center; justify-content:center; gap:7px; background:rgba(27,79,138,0.07); border:1px solid rgba(27,79,138,0.22); border-radius:100px; padding:7px 14px; font-size:0.75rem; font-weight:600; color:var(--vermelho-esc); margin-bottom:16px; text-align:center; }
+.urgencia-dot { width:7px; height:7px; flex-shrink:0; border-radius:50%; background:var(--vermelho); animation:pulseverm 1.5s infinite; }
+.valores-grid { display:grid; grid-template-columns:1fr 1fr; gap:9px; margin-bottom:12px; }
+.btn-valor { background:var(--branco); border:2px solid var(--borda); border-radius:12px; padding:14px 8px; text-align:center; cursor:pointer; position:relative; overflow:hidden; transition:all 0.18s; -webkit-tap-highlight-color:transparent; }
+.btn-valor:active { transform:scale(0.96); border-color:var(--vermelho); }
+.btn-valor.destaque { border-color:var(--azul); background:linear-gradient(135deg,var(--azul-claro),var(--branco)); }
+.btn-valor.destaque::after { content:'★ Mais doado'; position:absolute; top:5px; right:5px; background:var(--azul); color:#fff; font-size:0.50rem; font-weight:700; padding:2px 5px; border-radius:100px; }
+.btn-valor .preco { display:block; font-size:1.05rem; font-weight:700; color:var(--texto); margin-bottom:2px; }
+.btn-valor.destaque .preco { color:var(--azul); }
+.btn-valor .desc { display:block; font-size:0.63rem; color:var(--texto-suave); line-height:1.3; }
+.confianca { display:flex; flex-wrap:wrap; justify-content:center; gap:8px; margin-top:14px; padding-top:14px; border-top:1px solid var(--borda); }
+.confianca-item { font-size:0.68rem; color:var(--texto-suave); font-weight:500; display:flex; align-items:center; gap:3px; }
+.secao-video { background:var(--azul-claro); padding:28px 18px 32px; }
+.secao-video .secao-tag { font-size:0.63rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--azul); margin-bottom:5px; }
+.secao-video .secao-titulo { font-family:'Playfair Display',serif; font-size:1.20rem; font-weight:900; color:var(--texto); margin-bottom:14px; line-height:1.2; }
+.vsl-container {
+  position:relative; width:100%; padding-top:177.78%;
+  border-radius:14px; overflow:hidden; background:#000;
+  box-shadow:0 12px 40px rgba(13,31,60,0.20), 0 0 0 3px rgba(27,79,138,0.24);
+}
+.vsl-container iframe {
+  position:absolute; inset:0; width:100%; height:100%; border:none; display:block;
+  /* Remove qualquer controle do Vimeo */
+  pointer-events: auto;
+}
+/* Camuflagem total do Vimeo: remove todos os elementos flutuantes */
+.vsl-container iframe {
+  /* Força o iframe a não mostrar tooltips, botões, etc. */
+  /* Não é possível via CSS, mas a URL já desabilita tudo */
+}
+.vsl-cover { position:absolute; bottom:0; left:0; right:0; height:46px; background:#000; z-index:3; pointer-events:none; }
+.vsl-rodape { margin-top:10px; text-align:center; }
+.vsl-som-btn { background:none; border:1.5px solid var(--borda); border-radius:100px; padding:8px 20px; font-size:0.75rem; font-weight:600; color:var(--texto-suave); cursor:pointer; transition:all 0.2s; display:inline-flex; align-items:center; gap:6px; }
+.vsl-som-btn:hover { border-color:var(--vermelho); color:var(--vermelho); }
+.vsl-som-btn.ativo { border-color:#27AE60; color:#27AE60; background:rgba(39,174,96,0.06); }
+.secao { padding:36px 18px; }
+.secao-tag { font-size:0.63rem; font-weight:700; letter-spacing:2.5px; text-transform:uppercase; color:var(--azul); margin-bottom:6px; }
+.secao-titulo { font-family:'Playfair Display',serif; font-size:1.38rem; font-weight:900; color:var(--texto); margin-bottom:9px; line-height:1.2; }
+.secao-sub { font-size:0.86rem; color:var(--texto-suave); line-height:1.68; margin-bottom:22px; }
+.impact-cards { display:flex; flex-direction:column; gap:11px; }
+.impact-card { background:var(--branco); border-radius:14px; padding:16px 15px; box-shadow:var(--sombra); border:1.5px solid transparent; display:flex; align-items:flex-start; gap:13px; opacity:0; transform:translateY(16px); transition:opacity 0.4s ease, transform 0.4s ease; }
+.impact-card.visivel { opacity:1; transform:translateY(0); }
+.impact-icone { font-size:1.75rem; flex-shrink:0; }
+.impact-valor { font-size:0.65rem; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--vermelho); margin-bottom:2px; }
+.impact-card.azul .impact-valor { color:var(--azul); }
+.impact-card h3 { font-family:'Playfair Display',serif; font-size:0.93rem; font-weight:700; color:var(--texto); margin-bottom:3px; }
+.impact-card p { font-size:0.80rem; color:var(--texto-suave); line-height:1.58; }
+.impact-card p strong { color:var(--texto); }
+.secao-escura { background:var(--texto); padding:36px 18px; }
+.secao-escura .secao-tag { color:var(--dourado); }
+.secao-escura .secao-titulo { color:#fff; }
+.secao-escura .secao-sub { color:rgba(255,255,255,0.50); }
+.news-cards { display:flex; flex-direction:column; gap:11px; }
+.news-card { background:rgba(255,255,255,0.055); border:1px solid rgba(255,255,255,0.08); border-radius:13px; padding:16px 15px; opacity:0; transform:translateY(14px); transition:opacity 0.4s ease, transform 0.4s ease; }
+.news-card.visivel { opacity:1; transform:translateY(0); }
+.news-tag { font-size:0.60rem; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--dourado); margin-bottom:4px; }
+.news-card h4 { font-family:'Playfair Display',serif; font-size:0.92rem; color:#fff; margin-bottom:5px; line-height:1.33; }
+.news-card p { font-size:0.76rem; color:rgba(255,255,255,0.56); line-height:1.58; }
+.news-fonte { font-size:0.63rem; color:rgba(255,255,255,0.26); margin-top:6px; }
+.stat-callout { background:linear-gradient(135deg,rgba(27,79,138,0.20),rgba(27,79,138,0.06)); border:1px solid rgba(27,79,138,0.28); border-radius:14px; padding:20px 16px; margin-top:18px; text-align:center; }
+.stat-callout-num { font-family:'Playfair Display',serif; font-size:2.5rem; font-weight:900; color:var(--dourado); line-height:1; display:block; margin-bottom:6px; }
+.stat-callout p { font-size:0.82rem; color:rgba(255,255,255,0.66); line-height:1.62; }
+.stat-callout p strong { color:#fff; }
+.secao-azul { background:var(--azul); padding:36px 18px; }
+.secao-azul .secao-tag { color:var(--dourado); }
+.secao-azul .secao-titulo { color:#fff; }
+.secao-azul .secao-sub { color:rgba(255,255,255,0.52); }
+.depo-cards { display:flex; flex-direction:column; gap:11px; }
+.depo-card { background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.10); border-radius:14px; padding:18px 15px; opacity:0; transform:translateY(14px); transition:opacity 0.4s ease, transform 0.4s ease; }
+.depo-card.visivel { opacity:1; transform:translateY(0); }
+.depo-texto { font-family:'Caveat',cursive; font-size:1.05rem; font-weight:500; color:rgba(255,255,255,0.90); line-height:1.52; margin-bottom:14px; }
+.depo-texto::before { content:'"'; color:var(--dourado); font-size:1.6rem; line-height:0; vertical-align:-0.36em; margin-right:3px; }
+.depo-footer { display:flex; align-items:center; gap:9px; }
+.depo-avatar { width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg,var(--vermelho),var(--dourado)); display:flex; align-items:center; justify-content:center; font-family:'Playfair Display',serif; font-size:0.90rem; font-weight:700; color:#fff; flex-shrink:0; }
+.depo-nome { font-size:0.80rem; font-weight:600; color:#fff; }
+.depo-local { font-size:0.65rem; color:rgba(255,255,255,0.40); }
+.depo-estrelas { color:var(--dourado); font-size:0.70rem; margin-top:1px; }
+.sobre-img { width:100%; height:210px; object-fit:cover; border-radius:14px; display:block; margin-bottom:20px; box-shadow:0 8px 28px rgba(13,31,60,0.14); }
+.secao p { font-size:0.88rem; line-height:1.78; color:var(--texto-suave); margin-bottom:11px; }
+.secao p strong { color:var(--texto); }
+.destaque-box { background:var(--azul-claro); border-left:4px solid var(--azul); border-radius:0 11px 11px 0; padding:12px 14px; font-size:0.82rem; font-weight:600; color:var(--texto); margin-top:3px; margin-bottom:14px; }
+.badges { display:flex; flex-wrap:wrap; gap:7px; margin-bottom:14px; }
+.badge { background:var(--branco); border:1.5px solid var(--borda); border-radius:100px; padding:4px 11px; font-size:0.68rem; font-weight:600; color:var(--texto); }
+.fundador { margin-top:14px; padding:13px; background:var(--branco); border-radius:12px; box-shadow:0 2px 10px rgba(13,31,60,0.06); border:1px solid rgba(27,79,138,0.10); display:flex; gap:10px; align-items:flex-start; }
+.fundador-avatar { width:40px; height:40px; border-radius:50%; flex-shrink:0; background:linear-gradient(135deg,var(--vermelho),var(--azul)); display:flex; align-items:center; justify-content:center; font-size:1.1rem; }
+.fundador-txt strong { font-size:0.82rem; color:var(--texto); display:block; }
+.fundador-txt p { font-size:0.75rem; color:var(--texto-suave); line-height:1.5; margin-top:2px; margin-bottom:0; }
+.fundador-assinatura { font-family:'Caveat',cursive; font-size:1.05rem; color:var(--vermelho); font-weight:700; display:block; margin-top:3px; }
+.secao-faq { background:var(--azul-claro); padding:36px 18px; }
+.faq-lista { display:flex; flex-direction:column; gap:9px; margin-top:22px; }
+.faq-item { background:var(--branco); border-radius:12px; border:1.5px solid transparent; overflow:hidden; box-shadow:0 2px 9px rgba(13,31,60,0.06); transition:border-color 0.2s; }
+.faq-item.aberto { border-color:rgba(27,79,138,0.26); }
+.faq-btn { width:100%; text-align:left; background:none; border:none; padding:14px 15px; cursor:pointer; display:flex; align-items:center; justify-content:space-between; font-size:0.86rem; font-weight:600; color:var(--texto); gap:10px; -webkit-tap-highlight-color:transparent; }
+.faq-btn:hover { color:var(--vermelho); }
+.faq-seta { flex-shrink:0; width:22px; height:22px; border-radius:50%; background:var(--azul-claro); display:flex; align-items:center; justify-content:center; font-size:0.86rem; transition:transform 0.3s, background 0.2s; }
+.faq-item.aberto .faq-seta { transform:rotate(45deg); background:var(--vermelho); color:#fff; }
+.faq-resp { max-height:0; overflow:hidden; transition:max-height 0.35s ease; font-size:0.82rem; color:var(--texto-suave); line-height:1.68; }
+.faq-item.aberto .faq-resp { max-height:220px; }
+.faq-resp-inner { padding:0 15px 15px; }
+footer { background:var(--texto); }
+.footer-topo { padding:28px 18px 22px; }
+.footer-marca { display:flex; align-items:center; gap:10px; margin-bottom:16px; }
+.footer-escudo { width:40px; height:40px; background:var(--vermelho); clip-path:polygon(50% 0%,100% 15%,100% 72%,50% 100%,0% 72%,0% 15%); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.footer-escudo-inner { width:23px; height:23px; background:var(--dourado); clip-path:polygon(50% 0%,100% 15%,100% 72%,50% 100%,0% 72%,0% 15%); display:flex; align-items:center; justify-content:center; }
+.footer-escudo-s { font-family:'Playfair Display',serif; font-size:0.72rem; font-weight:900; color:var(--vermelho); }
+.footer-nome strong { font-size:0.92rem; font-weight:800; color:#fff; display:block; }
+.footer-nome span { font-size:0.55rem; color:rgba(255,255,255,0.44); letter-spacing:1.3px; text-transform:uppercase; }
+.footer-contatos { display:flex; flex-direction:column; gap:6px; margin-bottom:16px; }
+.footer-contato { display:flex; align-items:center; gap:7px; font-size:0.78rem; color:rgba(255,255,255,0.55); }
+.footer-contato a { color:var(--dourado); font-weight:600; }
+.footer-social { display:flex; gap:7px; margin-bottom:20px; }
+.footer-social a { width:32px; height:32px; border-radius:7px; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.11); display:flex; align-items:center; justify-content:center; font-size:0.80rem; color:rgba(255,255,255,0.65); transition:background 0.2s; }
+.footer-social a:hover { background:var(--vermelho); color:#fff; }
+.footer-selos { display:flex; flex-direction:column; gap:8px; }
+.footer-selo { background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.11); border-radius:9px; padding:8px 12px; display:flex; align-items:center; gap:9px; }
+.footer-selo-circulo { width:36px; height:36px; border-radius:50%; flex-shrink:0; border:2.5px solid #27AE60; display:flex; align-items:center; justify-content:center; }
+.footer-selo-circulo span { font-size:0.53rem; font-weight:900; color:#27AE60; text-align:center; line-height:1.1; }
+.footer-selo-txt strong { font-size:0.70rem; color:#fff; display:block; }
+.footer-selo-txt p { font-size:0.60rem; color:rgba(255,255,255,0.46); margin:0; }
+.footer-rodape { background:rgba(0,0,0,0.22); padding:13px 18px; text-align:center; }
+.footer-rodape p { font-size:0.85rem; color:#fff; line-height:1.5; margin:0; }
+.footer-rodape a { color:var(--dourado); text-decoration:underline; }
+.sticky { position:fixed; bottom:0; left:50%; transform:translateX(-50%) translateY(100%); width:100%; max-width:480px; z-index:200; background:rgba(255,255,255,0.98); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border-top:2px solid var(--vermelho); box-shadow:0 -4px 16px rgba(13,31,60,0.09); padding:10px 16px 12px; display:flex; align-items:center; justify-content:space-between; gap:12px; transition:transform 0.36s ease; }
+.sticky.visivel { transform:translateX(-50%) translateY(0); }
+.sticky-label { font-size:0.72rem; font-weight:600; color:var(--texto); }
+.sticky-label span { display:block; font-size:0.63rem; font-weight:400; color:var(--texto-suave); }
+.sticky-btn { background:var(--vermelho); color:#fff; border:none; border-radius:10px; padding:10px 18px; font-size:0.88rem; font-weight:700; white-space:nowrap; box-shadow:0 3px 12px rgba(27,79,138,0.36); text-decoration:none; display:inline-block; -webkit-tap-highlight-color:transparent; }
+.modal-fundo { position:fixed; inset:0; z-index:500; background:rgba(13,31,60,0.70); backdrop-filter:blur(5px); -webkit-backdrop-filter:blur(5px); display:flex; align-items:flex-end; justify-content:center; opacity:0; pointer-events:none; transition:opacity 0.28s ease; }
+.modal-fundo.aberto { opacity:1; pointer-events:all; }
+.modal { background:var(--branco); border-radius:20px 20px 0 0; padding:24px 20px 30px; width:100%; max-width:480px; text-align:center; position:relative; box-shadow:0 -12px 44px rgba(13,31,60,0.20); transform:translateY(100%); transition:transform 0.34s cubic-bezier(0.34,1.56,0.64,1); }
+.modal-fundo.aberto .modal { transform:translateY(0); }
+.modal-drag { width:34px; height:3px; background:var(--borda); border-radius:100px; margin:0 auto 16px; }
+.modal-fechar { position:absolute; top:11px; right:15px; background:none; border:none; font-size:1.40rem; color:var(--texto-suave); cursor:pointer; line-height:1; }
+.modal-icone { font-size:2.6rem; margin-bottom:4px; animation:heartbeat 1.4s ease infinite; }
+.modal-valor { font-family:'Playfair Display',serif; font-size:1.95rem; color:var(--vermelho); font-weight:900; margin-bottom:3px; }
+.modal h2 { font-family:'Playfair Display',serif; font-size:1.20rem; color:var(--texto); margin-bottom:6px; }
+.modal p { font-size:0.84rem; color:var(--texto-suave); line-height:1.60; margin-bottom:15px; }
+.modal-confirmar { width:100%; background:var(--vermelho); color:#fff; border:none; border-radius:12px; padding:15px; font-family:'DM Sans',sans-serif; font-size:0.96rem; font-weight:700; cursor:pointer; box-shadow:0 4px 14px rgba(27,79,138,0.36); transition:background 0.2s; }
+.modal-confirmar:hover { background:var(--vermelho-esc); }
+.modal-seguro { margin-top:9px; font-size:0.68rem; color:var(--texto-suave); display:flex; align-items:center; justify-content:center; gap:5px; }
+</style>
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-logo-wrap">
+    <div class="nav-escudo"><div class="nav-escudo-inner"><span class="nav-escudo-s">S</span></div></div>
+    <div class="nav-nome"><strong>Exército da Salvação</strong><span>Projeto Criança Solidária · MG</span></div>
+  </div>
+  <div class="nav-direita">
+    <div class="nav-ao-vivo"><span class="nav-dot"></span><span class="nav-live-txt" id="liveCount">14 doando</span></div>
+    <a href="#doar" class="nav-btn">Doar ❤️</a>
+  </div>
+</nav>
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-faixa" id="tickerFaixa">
+    <span class="ticker-item">❤️ <strong>Jorge</strong> · BH · <strong>R$ 50</strong> há 2 min</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">🌽 <strong>Carlos</strong> · Contagem · <strong>R$ 100</strong> há 5 min</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">🙏 <strong>Leandro</strong> · Uberlândia · <strong>R$ 30</strong> há 9 min</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">💊 <strong>Roberto</strong> · Montes Claros · <strong>R$ 250</strong> há 14 min</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">💚 <strong>Marina</strong> · Juiz de Fora · <strong>R$ 20</strong> há 19 min</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">⭐ <strong>Thiago</strong> · São Paulo · <strong>R$ 500</strong> há 23 min</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">🤍 <strong>Juliana</strong> · Ipatinga · <strong>R$ 15</strong> há 27 min</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">🍽️ <strong>Luana</strong> · Betim · <strong>R$ 100</strong> há 31 min</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">❤️ <strong>Ana Paula</strong> · BH · <strong>R$ 50</strong> há 2 min</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">🌽 <strong>Lucia</strong> · Contagem · <strong>R$ 100</strong> há 5 min</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">🙏 <strong>Fernanda</strong> · Uberlândia · <strong>R$ 30</strong> há 9 min</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">💊 <strong>Felipe</strong> · Montes Claros · <strong>R$ 250</strong> há 14 min</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">💚 <strong>Marina</strong> · Juiz de Fora · <strong>R$ 20</strong> há 19 min</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">⭐ <strong>Diego</strong> · São Paulo · <strong>R$ 500</strong> há 23 min</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">🤍 <strong>Beatriz</strong> · Ipatinga · <strong>R$ 15</strong> há 27 min</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">🍽️ <strong>Lucas</strong> · Rio de Janeiro · <strong>R$ 100</strong> há 31 min</span><span class="ticker-sep">·</span>
+  </div>
+</div>
+<section class="hero">
+  <div class="hero-foto"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-listra"></div>
+  <div class="hero-conteudo">
+    <div class="hero-badge">🛡️ Exército da Salvação · Minas Gerais</div>
+    <h1>Tem uma criança dormindo <em>com fome</em> esta noite</h1>
+    <p class="hero-sub">O Instituto Exército da Salvação — Minas Gerais desenvolveu o <strong>Projeto Criança Solidária</strong> para garantir alimentação e cuidados de saúde a crianças de todo o Brasil que não têm o básico para sobreviver.</p>
+    <div class="hero-pills"><div class="hero-pill"><strong>41 anos</strong> de missão</div><div class="hero-pill"><strong>Todo o Brasil</strong></div><div class="hero-pill"><strong>Selo Doar A+</strong></div></div>
+    <a href="#doar" class="btn-hero">❤️ Alimentar uma Criança Agora</a>
+  </div>
+</section>
+<div class="urgencia-faixa"><p>⏳ <strong>Faltam 4 dias</strong> para fechar a meta de abril — R$ 6.260 ainda precisam ser arrecadados.</p></div>
+<div class="progresso">
+  <p class="prog-label">Meta de abril · Projeto Criança Solidária</p>
+  <h2 class="prog-titulo">Juntos chegamos a R$ 15.000 🍽️</h2>
+  <div class="prog-barra-wrap"><div class="prog-barra-fill" id="progressoFill"></div></div>
+  <div class="prog-numeros"><span><strong>R$ 8.740</strong> arrecadados</span><span class="prog-pct" id="progressoPct">0%</span><span>Meta: <strong>R$ 15.000</strong></span></div>
+</div>
+<section class="secao-doacao" id="doar">
+  <p class="secao-tag">Doação Segura</p>
+  <h2 class="secao-titulo">Doe Agora — Rápido e Seguro</h2>
+  <p class="secao-sub">Cada centavo vai direto para comida e saúde de crianças que dependem desta campanha hoje.</p>
+  <div class="urgencia-pill"><span class="urgencia-dot"></span> Faltam 4 dias para fechar a meta — cada doação conta!</div>
+  <div class="valores-grid">
+    <button class="btn-valor" onclick="handleDonate('10','R$ 10,00')"><span class="preco">R$ 10,00</span><span class="desc">Lanche para 1 criança</span></button>
+    <button class="btn-valor" onclick="handleDonate('15','R$ 15,00')"><span class="preco">R$ 15,00</span><span class="desc">Refeição completa</span></button>
+    <button class="btn-valor" onclick="handleDonate('30','R$ 30,00')"><span class="preco">R$ 30,00</span><span class="desc">Kit nutrição / semana</span></button>
+    <button class="btn-valor destaque" onclick="handleDonate('50','R$ 50,00')"><span class="preco">R$ 50,00</span><span class="desc">Consulta + transporte</span></button>
+    <button class="btn-valor" onclick="handleDonate('100','R$ 100,00')"><span class="preco">R$ 100,00</span><span class="desc">Cesta + remédios</span></button>
+    <button class="btn-valor" onclick="handleDonate('250','R$ 250,00')"><span class="preco">R$ 250,00</span><span class="desc">1 mês de apoio</span></button>
+    <button class="btn-valor" onclick="handleDonate('500','R$ 500,00')"><span class="preco">R$ 500,00</span><span class="desc">Apoio a uma família</span></button>
+    <button class="btn-valor" onclick="handleDonate('1000','R$ 1.000,00')"><span class="preco">R$ 1.000,00</span><span class="desc">Padrinho do mês</span></button>
+  </div>
+  <div class="confianca"><div class="confianca-item">🔒 Pagamento seguro</div><div class="confianca-item">✅ Instituição verificada</div><div class="confianca-item">💚 100% à missão</div><div class="confianca-item">🧾 Recibo fiscal</div><div class="confianca-item">⭐ Selo Doar A+</div></div>
+</section>
+<section class="secao-video">
+  <p class="secao-tag">Assista antes de continuar</p>
+  <h2 class="secao-titulo">Veja onde vai cada real doado</h2>
+  <div class="vsl-container">
+    <!-- Badge removido para evitar qualquer informação do Vimeo -->
+    <div class="vsl-cover"></div>
+    <iframe id="vslIframe"
+      src="https://player.vimeo.com/video/1186835926?autoplay=1&muted=1&controls=0&title=0&byline=0&portrait=0&badge=0&pip=0&share=0&loop=0&dnt=1"
+      allow="autoplay; fullscreen; picture-in-picture"
+      allowfullscreen
+      title="Projeto Criança Solidária">
+    </iframe>
+  </div>
+  <div class="vsl-rodape"><button class="vsl-som-btn" id="somBtn" onclick="ativarSom()">🔇 Toque para ativar o som</button></div>
+</section>
+<section class="secao" id="impacto">
+  <p class="secao-tag">O que sua doação faz</p>
+  <h2 class="secao-titulo">Cada real chega direto na criança</h2>
+  <p class="secao-sub">Sem intermediários. O dinheiro compra comida e leva cuidados a quem não tem como buscar ajuda.</p>
+  <div class="impact-cards">
+    <div class="impact-card"><span class="impact-icone">🍚</span><div><p class="impact-valor">R$ 15,00</p><h3>Refeição Completa</h3><p>Garante <strong>uma refeição completa</strong> — arroz, feijão, proteína e fruta — para uma criança em vulnerabilidade.</p></div></div>
+    <div class="impact-card azul"><span class="impact-icone">🥛</span><div><p class="impact-valor">R$ 30,00</p><h3>Kit Nutrição Infantil</h3><p>Cobre <strong>leite, vitaminas e suplemento</strong> para uma semana de uma criança em desnutrição.</p></div></div>
+    <div class="impact-card"><span class="impact-icone">💊</span><div><p class="impact-valor">R$ 50,00</p><h3>Consulta + Transporte</h3><p>Financia <strong>transporte e consulta médica</strong> de uma criança que não teria como chegar ao posto de saúde.</p></div></div>
+    <div class="impact-card azul"><span class="impact-icone">🏠</span><div><p class="impact-valor">R$ 100,00</p><h3>Apoio a Uma Família</h3><p>Cobre <strong>cesta básica + remédios essenciais</strong> por uma semana para família em situação crítica.</p></div></div>
+  </div>
+</section>
+<section class="secao-escura" id="realidade">
+  <p class="secao-tag">A realidade que dói ver</p>
+  <h2 class="secao-titulo">O que está acontecendo agora</h2>
+  <p class="secao-sub">Dados reais. Crianças reais. A fome não espera.</p>
+  <div class="news-cards">
+    <div class="news-card"><p class="news-tag">🍽️ Fome Infantil · Brasil 2025</p><h4>32 milhões de crianças vivem na pobreza — muitas sem garantia de comer todo dia</h4><p>O UNICEF aponta que a falta de renda afeta mais de 20 milhões de crianças. No Norte de Minas, a situação é comparável ao Nordeste.</p><p class="news-fonte">Fonte: UNICEF Brasil · Relatório de Pobreza Infantil</p></div>
+    <div class="news-card"><p class="news-tag">💉 Saúde · Interior de MG</p><h4>Crianças percorrem horas para uma consulta — e muitas desistem no caminho</h4><p>Famílias do Vale do Jequitinhonha abandonam tratamentos por falta de dinheiro para transporte. O Projeto cobre esse custo.</p><p class="news-fonte">Fonte: Secretaria de Saúde de MG · 2024</p></div>
+    <div class="news-card"><p class="news-tag">📚 Fome e Aprendizado · MG</p><h4>Crianças que passam fome têm até 3x mais dificuldade de aprender</h4><p>A desnutrição nos primeiros anos afeta diretamente o desenvolvimento cerebral. Garantir comida é garantir o futuro.</p><p class="news-fonte">Fonte: FNDE · Relatório de Impacto Educacional 2024</p></div>
+  </div>
+  <div class="stat-callout"><span class="stat-callout-num">41 anos</span><p>O Exército da Salvação está no Brasil desde 1985 — <strong>alimentando crianças e levando cuidados de saúde</strong> a quem mais precisa, sem nunca parar.</p></div>
+</section>
+<section class="secao-azul">
+  <p class="secao-tag">Quem já doou conta</p>
+  <h2 class="secao-titulo">Um gesto que fica na alma</h2>
+  <p class="secao-sub">Palavras de quem sentiu na pele o que é estar do lado certo.</p>
+  <div class="depo-cards">
+    <div class="depo-card"><p class="depo-texto">Doei R$ 50 e recebi a foto de uma criança comendo pela primeira vez com fartura. Chorei mais do que ela, com certeza.</p><div class="depo-footer"><div class="depo-avatar">J</div><div><p class="depo-nome">Juliana Matos</p><p class="depo-local">Doadora desde 2022 · BH/MG</p><p class="depo-estrelas">★★★★★</p></div></div></div>
+    <div class="depo-card"><p class="depo-texto">O Exército da Salvação tem 41 anos de história real. Não é conversa — é entidade séria. Doo toda semana e recomendo a todo mundo.</p><div class="depo-footer"><div class="depo-avatar">R</div><div><p class="depo-nome">Ricardo Alves</p><p class="depo-local">Doador mensal · Uberlândia/MG</p><p class="depo-estrelas">★★★★★</p></div></div></div>
+    <div class="depo-card"><p class="depo-texto">Minha filha de 8 anos viu o vídeo comigo e pediu para a gente doar o dinheiro do lanche dela. Isso diz tudo.</p><div class="depo-footer"><div class="depo-avatar">P</div><div><p class="depo-nome">Patricia Lima</p><p class="depo-local">Doadora · Contagem/MG</p><p class="depo-estrelas">★★★★★</p></div></div></div>
+  </div>
+</section>
+<section class="secao" id="sobre">
+  <img class="sobre-img" src="https://static.wixstatic.com/media/66daf2_be3ea1de14dd4c2b9a1064cfae06d02c~mv2.jpg/v1/fill/w_864,h_864,al_c,q_85,enc_avif,quality_auto/66daf2_be3ea1de14dd4c2b9a1064cfae06d02c~mv2.jpg'" alt="Criança recebendo refeição pelo Projeto Criança Solidária" onerror="this.src='https://images.pexels.com/photos/6646917/pexels-photo-6646917.jpeg'">
+  <p class="secao-tag">Quem somos</p>
+  <h2 class="secao-titulo">41 anos alimentando e cuidando de quem mais precisa</h2>
+  <p>O <strong>Instituto Exército da Salvação — Minas Gerais</strong> desenvolveu o <strong>Projeto Criança Solidária</strong> para ajudar crianças de todo o Brasil que não têm acesso a alimentação adequada e cuidados básicos de saúde.</p>
+  <p>Atuamos com foco especial em <strong>comida e saúde</strong> — porque uma criança com fome não consegue aprender, se tratar ou simplesmente ser criança.</p>
+  <div class="destaque-box">🛡️ 100% das doações são destinadas à missão. Mantemos o <strong>Selo Doar A+</strong>, o mais alto padrão de gestão e transparência do Brasil.</div>
+  <div class="badges"><div class="badge">⭐ Selo Doar A+</div><div class="badge">🛡️ 41 anos de missão</div><div class="badge">🇧🇷 Atuação nacional</div><div class="badge">🔍 Transparência total</div><div class="badge">📋 OSCIP Registrada</div></div>
+  <div class="fundador">
+    <div class="fundador-avatar">🙏</div>
+    <div class="fundador-txt"><strong>Direção Regional · Minas Gerais</strong><p>"Nossa missão nunca mudou: servir à humanidade com amor. Cada criança alimentada é uma prova viva disso."</p><span class="fundador-assinatura">Exército da Salvação · MG</span></div>
+  </div>
+</section>
+<section class="secao-faq">
+  <p class="secao-tag">Dúvidas frequentes</p>
+  <h2 class="secao-titulo">Antes de fechar esta página</h2>
+  <div class="faq-lista">
+    <div class="faq-item"><button class="faq-btn" onclick="toggleFaq(this)">Como sei que minha doação chegou às crianças?<span class="faq-seta">+</span></button><div class="faq-resp"><div class="faq-resp-inner">O Exército da Salvação mantém o Selo Doar A+ — a certificação mais rigorosa do Brasil. O relatório de aplicação dos recursos é público no site oficial.</div></div></div>
+    <div class="faq-item"><button class="faq-btn" onclick="toggleFaq(this)">É seguro pagar pelo celular?<span class="faq-seta">+</span></button><div class="faq-resp"><div class="faq-resp-inner">Sim. Ambiente 100% criptografado. Aceitamos Pix, cartão de crédito e boleto. Seus dados nunca passam diretamente pelo site — tudo processado pelo gateway certificado.</div></div></div>
+    <div class="faq-item"><button class="faq-btn" onclick="toggleFaq(this)">O projeto atende só Minas Gerais?<span class="faq-seta">+</span></button><div class="faq-resp"><div class="faq-resp-inner">Não. A sede desta campanha é em Minas Gerais, mas o Projeto apoia crianças de todo o Brasil — com foco no Norte de Minas e Nordeste, onde a vulnerabilidade é mais crítica.</div></div></div>
+  </div>
+</section>
+<footer>
+  <div class="footer-topo">
+    <div class="footer-marca"><div class="footer-escudo"><div class="footer-escudo-inner"><span class="footer-escudo-s">S</span></div></div><div class="footer-nome"><strong>Exército da Salvação</strong><span>Projeto Criança Solidária · MG</span></div></div>
+    <div class="footer-contatos"><div class="footer-contato">📲 <a>0800 444 3216</a></div><div class="footer-contato">🌐 <a target="_blank">exercitodasalvacao.br</a></div><div class="footer-contato">📧 <a>@exercitodasalvacao.br</a></div></div>
+    <div class="footer-social"><a href="#" title="LinkedIn">in</a><a href="#" title="Facebook">f</a><a href="#" title="Instagram">📷</a><a href="#" title="YouTube">▶</a></div>
+    <div class="footer-selos"><div class="footer-selo"><div class="footer-selo-circulo"><span>SELO<br>A+</span></div><div class="footer-selo-txt"><strong>Selo Doar A+</strong><p></p></div></div><div class="footer-selo"><span style="font-size:1.5rem">🛡️</span><div class="footer-selo-txt"><strong>Instituição Verificada</strong><p></p></div></div><div class="footer-selo"><span style="font-size:1.5rem">🔒</span><div class="footer-selo-txt"><strong>Pagamento Seguro</strong><p></p></div></div></div>
+  </div>
+  <div class="footer-rodape">
+    <p> &nbsp;·&nbsp; Fundada em 03/01/1985 <br>Sede: Belo Horizonte, MG <br>© 2025 Instituto Exército da Salvação · Todos os direitos reservados<br><a href="#">Política de Privacidade</a> &nbsp;·&nbsp; <a href="#">Transparência</a></p>
+  </div>
+</footer>
+<div class="sticky" id="stickyBtn"><div class="sticky-label">🍽️ Meta de abril<span>R$ 6.260 ainda precisam de você</span></div><a href="#doar" class="sticky-btn">Alimentar agora</a></div>
+<div class="modal-fundo" id="modalFundo" onclick="fecharModal(event)"><div class="modal"><div class="modal-drag"></div><button class="modal-fechar" onclick="fecharModalDireto()">×</button><div class="modal-icone">❤️</div><div class="modal-valor" id="modalValor">R$ 50,00</div><h2>Você vai alimentar uma criança</h2><p>Sua doação vai direto para comida e cuidados de saúde de crianças que dependem do Projeto Criança Solidária hoje.</p><button class="modal-confirmar" id="modalBtn" onclick="confirmarDoacao()">Confirmar minha doação →</button><p class="modal-seguro">🔒 100% seguro &nbsp;·&nbsp; Recibo por e-mail &nbsp;·&nbsp; Dedutível no IR</p></div></div>
+<script>
+var donateLinks = {
+  '10':   'https://pay.exercitosalvacaokids.online/69ec8393e2bb499649d13f6d',
+  '15':   'https://pay.exercitosalvacaokids.online/69ec88f06c7bda03eba4e6bd',
+  '30':   'https://pay.exercitosalvacaokids.online/69ec8419e2bb499649d13fa3',
+  '50':   'https://pay.exercitosalvacaokids.online/69ec8462fd24d71c839da115',
+  '100':  'https://pay.exercitosalvacaokids.online/69ec84affd24d71c839da124',
+  '250':  'https://pay.exercitosalvacaokids.online/69ec850204d8aaf076453ce6',
+  '500':  'https://pay.exercitosalvacaokids.online/69ec8523dee8ed5ebc8948e2',
+  '1000': 'https://pay.exercitosalvacaokids.online/69ec8541e2bb499649d13fee'
+};
+var arrecadado = 8740, meta = 15000, linkAtual = '';
+window.addEventListener('load', function() {
+  setTimeout(function() {
+    var pct  = Math.round((arrecadado / meta) * 100);
+    var fill = document.getElementById('progressoFill');
+    var lbl  = document.getElementById('progressoPct');
+    if (fill) fill.style.width = pct + '%';
+    if (lbl)  lbl.textContent  = pct + '%';
+  }, 600);
+});
+var contagens = [11, 14, 12, 16, 13, 10, 15, 17, 12, 14, 13, 16];
+var ci = 0;
+function atualizarContador() {
+  ci = (ci + 1) % contagens.length;
+  var el = document.getElementById('liveCount');
+  if (!el) return;
+  el.style.opacity = '0';
+  setTimeout(function() {
+    el.textContent = contagens[ci] + ' doando';
+    el.style.transition = 'opacity 0.4s';
+    el.style.opacity = '1';
+  }, 300);
+}
+setInterval(atualizarContador, 8000);
+window.addEventListener('scroll', function() {
+  var s = document.getElementById('stickyBtn');
+  if (s) s.classList.toggle('visivel', window.scrollY > 320);
+}, { passive: true });
+function handleDonate(valor, label) {
+  linkAtual = donateLinks[valor] || '#';
+  document.getElementById('modalValor').textContent = label;
+  document.getElementById('modalFundo').classList.add('aberto');
+  document.body.style.overflow = 'hidden';
+}
+function confirmarDoacao() {
+  if (linkAtual && linkAtual[0] !== '#') {
+    window.location.href = linkAtual;
+  } else {
+    var btn = document.getElementById('modalBtn');
+    btn.textContent = '✓ Redirecionando...';
+    setTimeout(function() {
+      btn.textContent = 'Confirmar minha doação →';
+      fecharModalDireto();
+    }, 1400);
+  }
+}
+function fecharModal(e) { if (e.target === document.getElementById('modalFundo')) fecharModalDireto(); }
+function fecharModalDireto() {
+  document.getElementById('modalFundo').classList.remove('aberto');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape') fecharModalDireto(); });
+function toggleFaq(btn) {
+  var item   = btn.parentElement;
+  var aberto = item.classList.contains('aberto');
+  document.querySelectorAll('.faq-item').forEach(function(i) { i.classList.remove('aberto'); });
+  if (!aberto) item.classList.add('aberto');
+}
+function ativarSom() {
+  var iframe = document.getElementById('vslIframe');
+  var btn    = document.getElementById('somBtn');
+  if (!iframe) return;
+  var novoSrc = iframe.src.replace('&muted=1', '').replace('muted=1&', '').replace('muted=1', '');
+  iframe.src = novoSrc;
+  if (btn) {
+    btn.innerHTML = '🔊 Som ativado!';
+    btn.classList.add('ativo');
+    setTimeout(function() { btn.style.display = 'none'; }, 2000);
+  }
+}
+var obs = new IntersectionObserver(function(entries) {
+  entries.forEach(function(entry, i) {
+    if (entry.isIntersecting) {
+      setTimeout(function() { entry.target.classList.add('visivel'); }, i * 90);
+    }
+  });
+}, { threshold: 0.10 });
+document.querySelectorAll('.impact-card, .news-card, .depo-card').forEach(function(el) {
+  obs.observe(el);
+});
+</script>
+</body>
+</html>
